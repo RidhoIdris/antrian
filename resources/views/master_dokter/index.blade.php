@@ -63,8 +63,6 @@
             e.preventDefault();
             NProgress.start();
             var id = $('input[name="id"]').val();
-            var nama_dokter = $('input[name="nama_dokter"]').val();
-            var id_spesialis = $('#id_spesialis :selected').val();
             var button = $('#submit').text();
             var url = '';
             var method = '';
@@ -75,8 +73,12 @@
                 url = 'master-dokter/'+id;
                 method = "put";
             }
+            var image = $('#image')[0].files[0];
+            var form = new FormData(this);
+            form.append('image', image);
+            form.append('_method', method);
             $.ajax({
-                type : method,
+                type : 'post',
                 processData: false,
                 contentType: false,
                 cache: false,
@@ -84,7 +86,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                data : new FormData(this),
+                data : form,
                 success:function(data){
                     $('#modal').modal('hide');
                     Toast.fire({

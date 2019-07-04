@@ -3,8 +3,8 @@
 <div class="content-wrapper">
     <div class="row">
         <div class="col-12">
-            <h4 class="card-title d-inline">Master Jadwal Dokter</h4>
-            <button id="tambah" class="btn btn-success btn-sm float-right mb-3">Tambah Jadwal</button>
+            <h4 class="card-title d-inline">Master Asuransi</h4>
+            <button id="tambah" class="btn btn-success btn-sm float-right mb-3">Tambah Asuransi</button>
         </div>
     </div>
     <div class="card">
@@ -15,10 +15,9 @@
                 <thead>
                 <tr>
                     <th width="15px;">#</th>
-                    <th>Nama Dokter</th>
-                    <th>Hari</th>
-                    <th>Jam Mulai</th>
-                    <th>Jam Selesai</th>
+                    <th>No Asuransi</th>
+                    <th>Nama Asuransi</th>
+                    <th>Foto</th>
                     <th width="150px;" style="text-align:center" >Actions</th>
                 </tr>
                 </thead>
@@ -28,7 +27,7 @@
         </div>
     </div>
 </div>
-@include('master_jadwal_dokter.modal')
+@include('master_asuransi_pasien.modal')
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -36,13 +35,12 @@
         var getData = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('master-jadwal-dokter.show','1') }}",
+            ajax: "{{ route('master-asuransi-pasien.show','1') }}",
             columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex' },
-                        { data: 'dokter'},
-                        { data: 'hari'},
-                        { data: 'jam_mulai'},
-                        { data: 'jam_selesai'},
+                        { data: 'no_asuransi'},
+                        { data: 'nama_asuransi'},
+                        { data: 'foto', name: 'foto', orderable:false, searchable:false },
                         { data: 'action', name: 'action', orderable:false, searchable:false },
                     ],
         });
@@ -53,49 +51,42 @@
             showConfirmButton: false,
             timer: 5000
         });
+
         $('#tambah').click(function(){
             $('form :input').val('');
-            $('.modal-header h4').text('Tambah Jadwal Dokter');
+            $('.modal-header h4').text('Tambah Asuransi');
             $('button[type="submit"]').text('Save');
             $('#modal').modal('show');
-            $('#jam_mulai, #jam_selesai').datetimepicker({
-                format: 'HH:mm',
-                pickDate: false,
-                pickSeconds: false,
-                pick12HourFormat: false
-            });
         });
 
         $('#form').submit(function(e){
             e.preventDefault();
             NProgress.start();
             var id = $('input[name="id"]').val();
-            var hari = $('#hari :selected').val();
-            var jam_mulai = $('input[name="jam_mulai"]').val();
-            var jam_selesai = $('input[name="jam_selesai"]').val();
-            var id_dokter = $('#id_dokter :selected').val();
             var button = $('#submit').text();
             var url = '';
             var method = '';
             if(button == 'Save'){
-                url = 'master-jadwal-dokter';
+                url = 'master-asuransi-pasien';
                 method = "post";
             }else{
-                url = 'master-jadwal-dokter/'+id;
+                url = 'master-asuransi-pasien/'+id;
                 method = "put";
             }
+            var image = $('#image')[0].files[0];
+            var form = new FormData(this);
+            form.append('image', image);
+            form.append('_method', method);
             $.ajax({
-                type : method,
+                type : 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
                 url  :  url,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                data : {
-                    id_dokter: id_dokter,
-                    hari: hari,
-                    jam_mulai: jam_mulai,
-                    jam_selesai: jam_selesai,
-                },
+                data : form,
                 success:function(data){
                     $('#modal').modal('hide');
                     Toast.fire({
@@ -130,14 +121,14 @@
                     NProgress.start();
                     $.ajax({
                         type : "DELETE",
-                        url  :  'master-jadwal-dokter/'+id,
+                        url  :  'master-asuransi-pasien/'+id,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success:function(){
                             Toast.fire({
                                 type: 'success',
-                                title: "Jadwal Berhasil Di Hapus",
+                                title: "Asuransi Berhasil Di Hapus",
                             });
                             getData.ajax.reload();
                             NProgress.done();
@@ -151,27 +142,19 @@
         });
 
         $(document).on('click','#edit',function(){
-            $('.modal-header h4').text('Edit Jadwal Dokter');
+            $('.modal-header h4').text('Edit Asuransi');
             var id = $(this).attr('data-id');
             $.ajax({
                 type : "GET",
-                url  :  'master-jadwal-dokter/'+id+'/edit',
+                url  :  'master-asuransi-pasien/'+id+'/edit',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },success:function(data){
                     $('form :input').val('');
-                    $('#jam_mulai, #jam_selesai').datetimepicker({
-                        format: 'HH:mm',
-                        pickDate: false,
-                        pickSeconds: false,
-                        pick12HourFormat: false
-                    });
                     $('button[type="submit"]').text('Edit');
                     $('input[name="id"]').val(data.id);
-                    $('#hari').val(data.hari);
-                    $('input[name="jam_mulai"]').val(data.jam_mulai);
-                    $('input[name="jam_selesai"]').val(data.jam_selesai);
-                    $('#id_dokter').val(data.id_dokter);
+                    $('input[name="no_asuransi"]').val(data.no_asuransi);
+                    $('#asuransi_id').val(data.asuransi_id);
                     $('#modal').modal('show');
                 },error:function(data){
                     console.log(data);

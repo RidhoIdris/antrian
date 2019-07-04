@@ -26,9 +26,15 @@
         </div>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{route('home')}}">
+        <a class="nav-link" href="{{route('home.index')}}">
             <i class="icon-layers menu-icon"></i>
-            <span class="menu-title">Dashboard</span>
+            <span class="menu-title">Antrian</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{{route('antrian.index')}}">
+            <i class="icon-layers menu-icon"></i>
+            <span class="menu-title">Antrian Dokter</span>
         </a>
         </li>
         @hasrole('pasien')
@@ -36,6 +42,12 @@
         <a class="nav-link" href="{{route('profile.index')}}">
             <i class="icon-user menu-icon"></i>
             <span class="menu-title">Profile</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{{route('master-asuransi-pasien.index')}}">
+            <i class="icon-user menu-icon"></i>
+            <span class="menu-title">Asuransi</span>
         </a>
         </li>
         @endhasrole
@@ -51,7 +63,6 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('master-spesialis.index') }}">Master Spesialis</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('master-asuransi.index') }}">Master Asuransi</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('master-jadwal-dokter.index') }}">Master Jadwal Dokter</a></li>
-            <li class="nav-item"> <a class="nav-link" href="#">Master Pasien</a></li>
             <li class="nav-item"> <a class="nav-link" href="#">Master Pasien</a></li>
             </ul>
         </div>

@@ -70,31 +70,56 @@ class MasterDokterController extends Controller
 
     public function update(Request $request, $id)
     {
-        return response()->json(['errors'=>request('nama_dokter')],422);
-        die();
-        $validator = \Validator::make($request->all(),
-            [
-                'nama_dokter' => 'required|max:50|unique:master_dokter,nama_dokter,'.$id,
-                'id_spesialis' => 'required|max:50',
-                'image'        => 'sometimes|required|image|mimes:jpeg,png,jpg|max:1024',
-            ]
-        );
+        if ($request->image == 'undefined') {
+            $validator = \Validator::make($request->all(),
+                [
+                    'nama_dokter' => 'required|max:50|unique:master_dokter,nama_dokter,'.$id,
+                    'id_spesialis' => 'required|max:50',
+                ]
+            );
 
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()->first()],422);
+            if ($validator->fails())
+            {
+                return response()->json(['errors'=>$validator->errors()->first()],422);
+            }else{
+                MasterDokter::where(['id'=>$id])->update([
+                    'nama_dokter'=> request('nama_dokter'),
+                    'id_spesialis'=> request('id_spesialis'),
+                ]);
+                return response()->json(['message'=>'Dokter Berhasil Diubah']);
+            }
         }else{
-            MasterDokter::where(['id'=>$id])->update([
-                'nama_dokter'=> request('nama_dokter'),
-                'id_spesialis'=> request('id_spesialis'),
-            ]);
-            return response()->json(['message'=>'Spesialis Berhasil Diubah']);
+            $validator = \Validator::make($request->all(),
+                [
+                    'nama_dokter'  => 'required|max:50|unique:master_dokter,nama_dokter,'.$id,
+                    'id_spesialis' => 'required|max:50',
+                    'image'        => 'image|mimes:jpeg,png,jpg|max:1024',
+                ]
+            );
+
+            if ($validator->fails())
+            {
+                return response()->json(['errors'=>$validator->errors()->first()],422);
+            }else{
+                $oldImage = MasterDokter::where('id','=',$id)->first()->foto;
+                $imageName = time().'.'.request()->image->getClientOriginalExtension();
+                request()->image->move(public_path('images/dokter'), $imageName);
+                MasterDokter::where(['id'=>$id])->update([
+                    'nama_dokter'  => request('nama_dokter'),
+                    'id_spesialis' => request('id_spesialis'),
+                    'foto'         => $imageName,
+                ]);
+                @unlink(public_path('images/dokter/').$oldImage);
+                return response()->json(['message'=>'Asuransi Berhasil Diubah']);
+            }
         }
     }
 
     public function destroy($id)
     {
+        $oldImage = MasterDokter::where('id','=',$id)->first()->foto;
         MasterDokter::findOrFail($id)->delete($id);
+        @unlink(public_path('images/dokter/').$oldImage);
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);

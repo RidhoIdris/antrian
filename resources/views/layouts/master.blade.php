@@ -7,7 +7,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Pearl UI</title>
+    <title>Rs. Syafira Pekanbaru</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
@@ -27,8 +27,8 @@
     <!-- Header -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-success">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="{{ route('home') }}"><img src="{{ asset('images/logo.svg')}}" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="{{ route('home') }}"><img src="{{ asset('images/logo-mini.svg')}}" alt="logo"/></a>
+        <a class="navbar-brand brand-logo" href="{{ route('home.index') }}"><img src="{{ asset('images/logo.png')}}" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{{ route('home.index') }}"><img src="{{ asset('images/logo-mini.png')}}" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -104,7 +104,7 @@
         <!-- Footer -->
         <footer class="footer">
           <div class="container-fluid clearfix">
-            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2018 <a href="http://www.urbanui.com/" target="_blank">urbanui</a>. All rights reserved.</span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © {{date('Y')}} <a href="https://www.rs-syafira.com/" target="_blank">Rs Syafira</a>. All rights reserved.</span>
             <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
           </div>
         </footer>

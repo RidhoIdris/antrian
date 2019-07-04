@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use Spatie\Permission\Models\Role;
 use App\Pasien;
 
 class AuthController extends Controller
@@ -60,7 +59,7 @@ class AuthController extends Controller
     	])) {
     		return redirect()->back()->withDanger('Email Atau Password Salah');
     	}else{
-    		return redirect()->route('home');
+    		return redirect()->route('home.index');
     	}
     }
 

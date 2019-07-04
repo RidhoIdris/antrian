@@ -13,5 +13,4 @@ class JadwalDokter extends Model
         return $this->belongsTo('App\MasterDokter','id_dokter');
     }
 
-
 }
