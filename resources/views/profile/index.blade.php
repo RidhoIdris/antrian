@@ -21,7 +21,10 @@
               <h4 class="card-title mb-0">My Profile</h4>
               <ul class="nav nav-tabs tab-solid tab-solid-primary mb-0" id="myTab" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-expanded="true">Info</a>
+                  <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-expanded="true">Data Diri</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="penjamin-tab" data-toggle="tab" href="#penjamin" role="tab" aria-controls="penjamin" aria-expanded="true">Penjamin</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="avatar-tab" data-toggle="tab" href="#avatar" role="tab" aria-controls="avatar">Avatar</a>
@@ -34,10 +37,56 @@
             <div class="wrapper">
               <hr>
               <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade" id="penjamin" role="tabpanel" aria-labelledby="penjamin">
+                        <form action="{{ route('profile.penjamin',\Auth::user()->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                        <div class="form-group">
+                            <label for="nama_penjamin">Nama Penjamin</label>
+                        <input type="text" class="form-control" name="nama_penjamin" placeholder="Change Nama Penjamin" value="{{old('nama_penjamin',\Auth::user()->load('pasien')->pasien->nama_pj)}}">
+                            @error('nama_penjamin')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="hubungan">Hubungan</label>
+                        <input type="text" class="form-control" name="hubungan" placeholder="Change Hubungan" value="{{old('hubungan',\Auth::user()->load('pasien')->pasien->hubungan)}}">
+                            @error('hubungan')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="no_hp_penjamin">No Hp Penjamin</label>
+                        <input type="text" class="form-control" name="no_hp_penjamin" placeholder="Change No Hp Penjamin" value="{{old('no_hp_penjamin',\Auth::user()->load('pasien')->pasien->no_hp_pj)}}">
+                            @error('no_hp_penjamin')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat_penjamin">Alamat Penjamin</label>
+                            <textarea name="alamat_penjamin" id="alamat_penjamin" rows="6" class="form-control" placeholder="Change Alamat Penjamin">{{old('alamat_pj',\Auth::user()->load('pasien')->pasien->alamat_pj)}}</textarea>
+                            @error('alamat_penjamin')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group mt-5">
+                            <button type="submit" class="btn btn-success mr-2" id="update">Update</button>
+                            <button class="btn btn-outline-danger">Cancel</button>
+                        </div>
+                        </form>
+                    </div>
+                    <!-- tab content ends -->
                 <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info">
-                    <form action="{{ route('profile.info',\Auth::user()->id) }}" method="POST">
+                    <form action="{{ route('profile.info',['id_user'=>\Auth::user()->id,'id_pasien'=>\Auth::user()->load('pasien')->pasien->id]) }}" method="POST">
                         @csrf
                         @method('PUT')
+                    <div class="form-group">
+                      <label for="nik">Nik</label>
+                    <input type="text" class="form-control" name="nik" placeholder="Change Nik" value="{{old('nik',\Auth::user()->load('pasien')->pasien->no_identitas)}}">
+                        @error('nik')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="form-group">
                       <label for="nama_lengkap">Nama Lengkap</label>
                     <input type="text" class="form-control" name="nama_lengkap" placeholder="Change Full Name" value="{{old('nama_lengkap',\Auth::user()->load('pasien')->pasien->nama_lengkap)}}">

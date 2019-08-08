@@ -13,11 +13,12 @@ class PasienController extends Controller
         return view('profile.index');
     }
 
-    public function info(Request $request,$id)
+    public function info(Request $request,$id_user,$id_pasien)
     {
         $validator = \Validator::make($request->all(),
             [
-                'email' => 'required|email|max:50|unique:users,email,'.$id,
+                'nik' => 'required|max:50|unique:master_pasien,no_identitas,'.$id_pasien,
+                'email' => 'required|email|max:50|unique:users,email,'.$id_user,
                 'nama_lengkap' => 'required|max:50',
                 'nama_panggilan' => 'required|max:50',
                 'tanggal_lahir' => 'required|date',
@@ -32,7 +33,8 @@ class PasienController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);;
         }else
         {
-            $pasien = Pasien::whereId_user($id)->update([
+            $pasien = Pasien::whereId_user($id_user)->update([
+                'no_identitas' => request('nik'),
                 'nama_lengkap' => request('nama_lengkap'),
                 'nama_panggilan' => request('nama_panggilan'),
                 'tanggal_lahir' => request('tanggal_lahir'),
@@ -42,11 +44,37 @@ class PasienController extends Controller
                 'no_hp' => request('no_hp'),
             ]);
 
-            User::whereId($id)->update([
+            User::whereId($id_user)->update([
                 'email' => request('email')
             ]);
 
-            return redirect()->route('profile.index')->withSuccess('Update Profile Berhasil');
+            return redirect()->route('profile.index'.'#info')->withSuccess('Update Profile Berhasil');
+        }
+    }
+    public function penjamin(Request $request,$id)
+    {
+        $validator = \Validator::make($request->all(),
+            [
+
+                'nama_penjamin' => 'required|max:255',
+                'hubungan' => 'required|max:255',
+                'alamat_penjamin' => 'required|max:255',
+                'no_hp_penjamin' => 'required|max:13',
+            ]
+        );
+        if ($validator->fails())
+        {
+            return redirect()->back()->withInput()->withErrors($validator);;
+        }else
+        {
+            $pasien = Pasien::whereId_user($id)->update([
+                'alamat_pj' => request('alamat_penjamin'),
+                'no_hp_pj' => request('no_hp_penjamin'),
+                'hubungan' => request('hubungan'),
+                'nama_pj' => request('nama_penjamin'),
+            ]);
+
+            return redirect()->route('profile.index',['#penjamin'])->withSuccess('Update Profile Berhasil');
         }
     }
 

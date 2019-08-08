@@ -63,7 +63,7 @@
             <li class="nav-item"> <a class="nav-link" href="{{ route('master-spesialis.index') }}">Master Spesialis</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('master-asuransi.index') }}">Master Asuransi</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('master-jadwal-dokter.index') }}">Master Jadwal Dokter</a></li>
-            <li class="nav-item"> <a class="nav-link" href="#">Master Pasien</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('master-user.index') }}">Master Users</a></li>
             </ul>
         </div>
         </li>

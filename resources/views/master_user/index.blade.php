@@ -3,8 +3,8 @@
 <div class="content-wrapper">
     <div class="row">
         <div class="col-12">
-            <h4 class="card-title d-inline">Master Jadwal Dokter</h4>
-            <button id="tambah" class="btn btn-success btn-sm float-right mb-3">Tambah Jadwal</button>
+            <h4 class="card-title d-inline">Master Users</h4>
+            <button id="tambah" class="btn btn-success btn-sm float-right mb-3">Tambah User</button>
         </div>
     </div>
     <div class="card">
@@ -15,10 +15,8 @@
                 <thead>
                 <tr>
                     <th width="15px;">#</th>
-                    <th>Nama Dokter</th>
-                    <th>Hari</th>
-                    <th>Jam Mulai</th>
-                    <th>Jam Selesai</th>
+                    <th>Nama User</th>
+                    <th>Email</th>
                     <th width="150px;" style="text-align:center" >Actions</th>
                 </tr>
                 </thead>
@@ -28,22 +26,19 @@
         </div>
     </div>
 </div>
-@include('master_jadwal_dokter.modal')
+@include('master_user.modal')
 @endsection
 @section('script')
 <script type="text/javascript">
     $(document).ready(function() {
         var getData = $('#table').DataTable({
-            destroy: true,
             processing: true,
             serverSide: true,
-            ajax: "{{ route('master-jadwal-dokter.show','1') }}",
+            ajax: "{{ route('master-user.show','1') }}",
             columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex' },
-                        { data: 'dokter'},
-                        { data: 'hari'},
-                        { data: 'jam_mulai'},
-                        { data: 'jam_selesai'},
+                        { data: 'name'},
+                        { data: 'email'},
                         { data: 'action', name: 'action', orderable:false, searchable:false },
                     ],
         });
@@ -54,35 +49,31 @@
             showConfirmButton: false,
             timer: 5000
         });
+
         $('#tambah').click(function(){
             $('form :input').val('');
-            $('.modal-header h4').text('Tambah Jadwal Dokter');
+            $('.modal-header h4').text('Tambah User');
             $('button[type="submit"]').text('Save');
             $('#modal').modal('show');
-            $('#jam_mulai, #jam_selesai').datetimepicker({
-                format: 'HH:mm',
-                pickDate: false,
-                pickSeconds: false,
-                pick12HourFormat: false
-            });
         });
 
         $('#form').submit(function(e){
             e.preventDefault();
             NProgress.start();
             var id = $('input[name="id"]').val();
-            var hari = $('#hari :selected').val();
-            var jam_mulai = $('input[name="jam_mulai"]').val();
-            var jam_selesai = $('input[name="jam_selesai"]').val();
-            var id_dokter = $('#id_dokter :selected').val();
+            var name = $('input[name="name"]').val();
+            var email = $('input[name="email"]').val();
+            var password = $('input[name="password"]').val();
+            var password_confirmation = $('input[name="password_confirmation"]').val();
+            var role = $('#role :selected').val();
             var button = $('#submit').text();
             var url = '';
             var method = '';
             if(button == 'Save'){
-                url = 'master-jadwal-dokter';
+                url = 'master-user';
                 method = "post";
             }else{
-                url = 'master-jadwal-dokter/'+id;
+                url = 'master-user/'+id;
                 method = "put";
             }
             $.ajax({
@@ -92,10 +83,11 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data : {
-                    id_dokter: id_dokter,
-                    hari: hari,
-                    jam_mulai: jam_mulai,
-                    jam_selesai: jam_selesai,
+                    name: name,
+                    email: email,
+                    password: password,
+                    password_confirmation: password_confirmation,
+                    role: role,
                 },
                 success:function(data){
                     $('#modal').modal('hide');
@@ -131,14 +123,14 @@
                     NProgress.start();
                     $.ajax({
                         type : "DELETE",
-                        url  :  'master-jadwal-dokter/'+id,
+                        url  :  'master-user/'+id,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success:function(){
                             Toast.fire({
                                 type: 'success',
-                                title: "Jadwal Berhasil Di Hapus",
+                                title: "User Berhasil Di Hapus",
                             });
                             getData.ajax.reload();
                             NProgress.done();
@@ -152,27 +144,19 @@
         });
 
         $(document).on('click','#edit',function(){
-            $('.modal-header h4').text('Edit Jadwal Dokter');
+            $('.modal-header h4').text('Edit User');
             var id = $(this).attr('data-id');
             $.ajax({
                 type : "GET",
-                url  :  'master-jadwal-dokter/'+id+'/edit',
+                url  :  'master-user/'+id+'/edit',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },success:function(data){
                     $('form :input').val('');
-                    $('#jam_mulai, #jam_selesai').datetimepicker({
-                        format: 'HH:mm',
-                        pickDate: false,
-                        pickSeconds: false,
-                        pick12HourFormat: false
-                    });
                     $('button[type="submit"]').text('Edit');
                     $('input[name="id"]').val(data.id);
-                    $('#hari').val(data.hari);
-                    $('input[name="jam_mulai"]').val(data.jam_mulai);
-                    $('input[name="jam_selesai"]').val(data.jam_selesai);
-                    $('#id_dokter').val(data.id_dokter);
+                    $('input[name="name"]').val(data.name);
+                    $('input[name="email"]').val(data.email);
                     $('#modal').modal('show');
                 },error:function(data){
                     console.log(data);

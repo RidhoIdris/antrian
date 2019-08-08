@@ -47,28 +47,72 @@ class HomeController extends Controller
         $pasien = Pasien::where('id_user','=',\Auth::user()->id)->first()->id;
         $dayNow = Carbon::now()->format('D');
         $time = date('H:i:s');
-        $validator = \Validator::make($request->all(),
-            [
-                'tipe_pembayaran' => 'required|max:10',
-                "id_asuransi"     => "required_if:tipe_pembayaran,==,Asuransi"
-            ]
-        );
-
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()->first()],422);
+        $cek = DB::table('master_pasien')
+                    ->orWhereNull('nama_lengkap')
+                    ->orWhere('nama_lengkap','')
+                    ->orWhereNull('nama_panggilan')
+                    ->orWhere('nama_panggilan','')
+                    ->orWhereNull('jenis_kelamin')
+                    ->orWhere('jenis_kelamin','')
+                    ->orWhereNull('tanggal_lahir')
+                    ->orWhereNull('no_identitas')
+                    ->orWhere('no_identitas','')
+                    ->orWhereNull('agama')
+                    ->orWhere('agama','')
+                    ->orWhereNull('pendidikan')
+                    ->orWhere('pendidikan','')
+                    ->orWhereNull('no_hp')
+                    ->orWhere('no_hp','')
+                    ->orWhereNull('alamat')
+                    ->orWhere('alamat','')
+                    ->orWhereNull('alamat_pj')
+                    ->orWhere('alamat_pj','')
+                    ->orWhereNull('nama_pj')
+                    ->orWhere('nama_pj','')
+                    ->orWhereNull('hubungan')
+                    ->orWhere('hubungan','')
+                    ->orWhereNull('no_hp_pj')
+                    ->orWhere('no_hp_pj','')
+                    ->where('id',$pasien)
+                    ->first();
+        if ($cek) {
+            return response()->json(['errors'=>'Silahkan Lengkapi Profile Anda TerlebihDahulu'],422);
         }else{
-            AntrianPasien::create([
-                'id_dokter'       => request('id_dokter'),
-                'no_antrian'      => request('no_antrian'),
-                'tipe_pembayaran' => request('tipe_pembayaran'),
-                'id_asuransi'     => request('id_asuransi'),
-                'status'          => '0',
-                'id_pasien'       => $pasien,
-                'jam'             => $time,
-                'hari'            => $dayNow,
-            ]);
-            return response()->json(['message'=>'Berhasil Mengambil Antrial']);
+            $cek = DB::table('tb_antrian')
+            ->whereDate('created_at',Carbon::today())
+            ->where('id_dokter',$request->id_dokter)
+            ->where('id_pasien',$pasien)
+            ->where('status','0')
+            ->where('id_dokter',$request->id_dokter)
+            ->first();
+            if ($cek) {
+                return response()->json(['errors'=>'Anda Sudah Mengambil Antrian Untuk Dokter Ini'],422);
+            }else{
+                $validator = \Validator::make($request->all(),
+                    [
+                        'tipe_pembayaran' => 'required|max:10',
+                        "id_asuransi"     => "required_if:tipe_pembayaran,==,Asuransi"
+                    ]
+                );
+
+                if ($validator->fails())
+                {
+                    return response()->json(['errors'=>$validator->errors()->first()],422);
+                }else{
+                    AntrianPasien::create([
+                        'id_dokter'       => request('id_dokter'),
+                        'no_antrian'      => request('no_antrian'),
+                        'tipe_pembayaran' => request('tipe_pembayaran'),
+                        'id_asuransi'     => request('id_asuransi'),
+                        'status'          => '0',
+                        'id_pasien'       => $pasien,
+                        'jam'             => $time,
+                        'hari'            => $dayNow,
+                    ]);
+                    return response()->json(['message'=>'Berhasil Mengambil Antrial']);
+                }
+            }
+
         }
     }
 }
