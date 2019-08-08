@@ -109,6 +109,13 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                      <label for="pendidikan">Pendidikan</label>
+                    <input type="text" class="form-control" name="pendidikan" placeholder="Change Pendidikan" value="{{old('pendidikan',\Auth::user()->load('pasien')->pasien->pendidikan)}}">
+                        @error('pendidikan')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                       <label for="no_hp">No Hp</label>
                     <input type="text" class="form-control" name="no_hp" placeholder="Change Full Name" value="{{old('no_hp',\Auth::user()->load('pasien')->pasien->no_hp)}}">
                         @error('no_hp')

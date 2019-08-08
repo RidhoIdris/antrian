@@ -20,6 +20,7 @@ class PasienController extends Controller
                 'nik' => 'required|max:50|unique:master_pasien,no_identitas,'.$id_pasien,
                 'email' => 'required|email|max:50|unique:users,email,'.$id_user,
                 'nama_lengkap' => 'required|max:50',
+                'pendidikan' => 'required|max:50',
                 'nama_panggilan' => 'required|max:50',
                 'tanggal_lahir' => 'required|date',
                 'agama' => 'required|max:50',
@@ -35,6 +36,7 @@ class PasienController extends Controller
         {
             $pasien = Pasien::whereId_user($id_user)->update([
                 'no_identitas' => request('nik'),
+                'pendidikan' => request('pendidikan'),
                 'nama_lengkap' => request('nama_lengkap'),
                 'nama_panggilan' => request('nama_panggilan'),
                 'tanggal_lahir' => request('tanggal_lahir'),
