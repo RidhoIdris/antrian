@@ -48,7 +48,7 @@ class PasienController extends Controller
                 'email' => request('email')
             ]);
 
-            return redirect()->route('profile.index'.'#info')->withSuccess('Update Profile Berhasil');
+            return redirect()->route('profile.index')->withSuccess('Update Profile Berhasil');
         }
     }
     public function penjamin(Request $request,$id)
@@ -74,7 +74,7 @@ class PasienController extends Controller
                 'nama_pj' => request('nama_penjamin'),
             ]);
 
-            return redirect()->route('profile.index',['#penjamin'])->withSuccess('Update Profile Berhasil');
+            return redirect()->route('profile.index')->withSuccess('Update Profile Berhasil');
         }
     }
 
