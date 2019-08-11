@@ -102,7 +102,7 @@ and CAST(tb_antrian.created_at as date) = CURRENT_DATE)" );
             ->where('status','0')
             ->where('id_dokter',$request->id_dokter)
             ->first();
-            if (!$cek) {
+            if ($cek) {
                 return response()->json(['errors'=>'Anda Sudah Mengambil Antrian Untuk Dokter Ini'],422);
             }else{
                 $validator = \Validator::make($request->all(),
