@@ -17,6 +17,7 @@
                     <th width="15px;">#</th>
                     <th>Nama User</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th width="150px;" style="text-align:center" >Actions</th>
                 </tr>
                 </thead>
@@ -27,6 +28,7 @@
     </div>
 </div>
 @include('master_user.modal')
+@include('master_user.modal-profile')
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -39,6 +41,7 @@
                         { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                         { data: 'name'},
                         { data: 'email'},
+                        { data: 'role'},
                         { data: 'action', name: 'action', orderable:false, searchable:false },
                     ],
         });
@@ -152,10 +155,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },success:function(data){
+
                     $('form :input').val('');
                     $('button[type="submit"]').text('Edit');
                     $('input[name="id"]').val(data.id);
                     $('input[name="name"]').val(data.name);
+                    $('#role').val(data.roles[0].name);
                     $('input[name="email"]').val(data.email);
                     $('#modal').modal('show');
                 },error:function(data){
@@ -163,6 +168,40 @@
                 }
             })
         });
+
+        $(document).on('click','#pasien',function(e){
+        e.preventDefault();
+        @hasrole('admin|perawat')
+        var id = $(this).attr('id-user')
+        $.ajax({
+            type : 'GET',
+            url  :  'master-user/getprofilepasien/'+id,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(data){
+                $('#nama_lengkap').val(data.pasien.nama_lengkap)
+                $('#no_identitas').val(data.pasien.no_identitas)
+                $('#pendidikan').val(data.pasien.pendidikan)
+                $('#agama').val(data.pasien.agama)
+                $('#no_hp').val(data.pasien.no_hp)
+                $('#alamat').text(data.pasien.alamat)
+                $('#alamat_pj').text(data.pasien.alamat_pj)
+                $('#nama_pj').val(data.pasien.nama_pj)
+                $('#no_hp_pj').val(data.pasien.no_hp_pj)
+                $('#hubungan').val(data.pasien.hubungan)
+                $('#tgl_lahir').val(data.pasien.tanggal_lahir)
+                $('#jk').val(data.pasien.jenis_kelamin)
+                $('#avatar_pasien').attr('src',"{{asset('images/avatar')}}/"+data.pasien.avatar)
+                $('#modal').modal('hide');
+                $('#modal-profile').modal('show');
+            },
+            error:function(data){
+                console.log(data);
+            }
+        });
+        @endhasrole
+    })
 
     });
 </script>

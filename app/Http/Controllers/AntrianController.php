@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\AntrianPasien;
+use Carbon\Carbon;
 
 class AntrianController extends Controller
 {
     public function index()
     {
-        $antrians = DB::table('view_antrian_dokter')->get();
+        $dayNow = $this->converthari(Carbon::now()->format('D'));
+        $antrians = DB::table('view_antrian_dokter')->where('hari',$dayNow)->get();
         return view('antrian_dokter.index',compact('antrians'));
     }
 
@@ -22,10 +24,29 @@ class AntrianController extends Controller
         return response()->json(["Message" => "Berhasil"]);
     }
 
+    public function converthari($date)
+    {
+        if ($date == 'Sun') {
+            return "Minggu";
+        }elseif($date == 'Mon'){
+            return "Senin";
+        }elseif($date == 'Tue'){
+            return "Selasa";
+        }elseif($date == 'Wed'){
+            return "Rabu";
+        }elseif($date == 'Thu'){
+            return "Kamis";
+        }elseif($date == 'Fri'){
+            return "Jumat";
+        }elseif($date == 'Sat'){
+            return "Sabtu";
+        }
+    }
+
     public function getListPasien($id_dokter)
     {
 
-        $data = DB::table('view_list_antrian')->where('id_dokter',$id_dokter)->get();
+        $data = DB::table('view_list_antrian')->where('id_jadwal',$id_dokter)->get();
         return Datatables($data)
                 ->addIndexColumn()
                 ->addColumn('status',function($data){

@@ -4,7 +4,9 @@
     <div class="row">
         <div class="col-12">
             <h4 class="card-title d-inline">Master Jadwal Dokter</h4>
+            @hasrole('admin')
             <button id="tambah" class="btn btn-success btn-sm float-right mb-3">Tambah Jadwal</button>
+            @endhasrole
         </div>
     </div>
     <div class="card">
@@ -19,7 +21,9 @@
                     <th>Hari</th>
                     <th>Jam Mulai</th>
                     <th>Jam Selesai</th>
+                    @hasrole('admin')
                     <th width="150px;" style="text-align:center" >Actions</th>
+                    @endhasrole
                 </tr>
                 </thead>
             </table>
@@ -44,7 +48,9 @@
                         { data: 'hari'},
                         { data: 'jam_mulai'},
                         { data: 'jam_selesai'},
+                        @hasrole('admin')
                         { data: 'action', name: 'action', orderable:false, searchable:false },
+                        @endhasrole
                     ],
         });
         const Toast = Swal.mixin({

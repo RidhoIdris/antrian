@@ -89,7 +89,7 @@ class PasienController extends Controller
         ]);
 
         if(\Auth::user()->load('pasien')->pasien->avatar != "default.png"){
-            unlink(public_path('images/avatar/'). \Auth::user()->load('pasien')->pasien->avatar);
+            @unlink(public_path('images/avatar/'). \Auth::user()->load('pasien')->pasien->avatar);
         }
 
         $imageName = $id.time().'.'.request()->image->getClientOriginalExtension();

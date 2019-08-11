@@ -15,6 +15,7 @@
                 <div class="row">
                     <div class="form-group col-12">
                         <input type="hidden" name="id_dokter" id="id_dokter">
+                        <input type="hidden" name="id_jadwal" id="id_jadwal">
                         <input type="hidden" name="no_antrian" id="no_antrian">
                         <select class="form-control" name="tipe_pembayaran" id="tipe_pembayaran">
                             <option value="">-- Pilih Metode Pembayaran --</option>

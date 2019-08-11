@@ -25,11 +25,13 @@
             </div>
         </div>
         </li>
+        @hasrole('pasien')
         <li class="nav-item">
         <a class="nav-link" href="{{route('home.index')}}">
             <i class="icon-layers menu-icon"></i>
             <span class="menu-title">Antrian</span>
         </a>
+        @endhasrole
         </li>
         <li class="nav-item">
         <a class="nav-link" href="{{route('antrian.index')}}">
@@ -51,6 +53,15 @@
         </a>
         </li>
         @endhasrole
+        @hasrole('perawat')
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('master-jadwal-dokter.index')}}">
+                <i class="icon-user menu-icon"></i>
+                <span class="menu-title">Jadwal Dokter</span>
+            </a>
+        </li>
+        @endhasrole
+        @hasrole('admin')
         <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#sidebar-layouts" aria-expanded="false" aria-controls="sidebar-layouts">
             <i class="icon-globe menu-icon"></i>
@@ -67,5 +78,6 @@
             </ul>
         </div>
         </li>
+        @endhasrole
     </ul>
 </nav>

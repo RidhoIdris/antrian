@@ -12,15 +12,22 @@
                  <div class="card col-3 mb-3">
                  <img class="card-img-top" src="{{ asset('images/dokter') }}/{{$antrian->foto}}" alt="Card image cap">
                     <ul class="list-group list-group-flush">
-                        <a href="#" id="list-antrian" id-dokter="{{$antrian->id_dokter}}">
+                    <a href="#" id="list-antrian" id-jadwal="{{$antrian->id_jadwal}}" id-dokter="{{$antrian->id_dokter}}">
                             <li class="list-group-item"><i class="icon-user"></i> {{$antrian->nama_dokter}}</li>
                         </a>
                         <li class="list-group-item"><i class="icon-user-following"></i> {{$antrian->nama_pasien}}</li>
                         <li class="list-group-item"><i class="icon-refresh"></i> {{$antrian->no_antrian}}</li>
+                        <li class="list-group-item"><i class="icon-clock"></i> {{$antrian->jam_mulai.' s/d '. $antrian->jam_selesai}}</li>
                     </ul>
                     <div class="card-footer" align="center">
-                        <a href="#" id="mic" id_antrian="{{$antrian->id}}" nama_dokter="{{$antrian->nama_dokter}}" nama_pasien="{{$antrian->nama_pasien}}" no_antrian="{{$antrian->no_antrian}}" nama class="btn btn-primary btn-sm"><i class="icon-microphone"></i></a>
-                        <a href="#" id="next" id_antrian="{{$antrian->id}}" class="btn btn-success btn-sm"><i class="icon-control-forward"></i></a>
+                        @if (date('H:i:s') < $antrian->jam_mulai)
+                            maaf antrian belum dibuka
+                        @else
+                            @hasrole('admin|perawat')
+                            <a href="#" id="mic" id_antrian="{{$antrian->id}}" nama_dokter="{{$antrian->nama_dokter}}" nama_pasien="{{$antrian->nama_pasien}}" no_antrian="{{$antrian->no_antrian}}" nama class="btn btn-primary btn-sm"><i class="icon-microphone"></i></a>
+                            <a href="#" id="next" id_antrian="{{$antrian->id}}" class="btn btn-success btn-sm"><i class="icon-control-forward"></i></a>
+                            @endhasrole
+                        @endif
                     </div>
                 </div>
             @endforeach
@@ -46,13 +53,14 @@ $(document).ready(function(){
     $(document).on('click','#list-antrian',function(e){
         e.preventDefault();
         var id_dokter = $(this).attr('id-dokter');
+        var id_jadwal = $(this).attr('id-jadwal');
         $('#tabel').DataTable({
             destroy: true,
             processing: true,
             serverSide: true,
-            ajax: "antrian/getpasien/"+id_dokter,
+            ajax: "antrian/getpasien/"+id_jadwal,
             columns: [
-                        { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                        { data: 'no_antrian' },
                         { data: 'nama_lengkap'},
                         { data: 'tipe_pembayaran'},
                         { data: 'nama_asuransi'},
@@ -90,6 +98,7 @@ $(document).ready(function(){
 
     $(document).on('click','#pasien',function(e){
         e.preventDefault();
+        @hasrole('admin|perawat')
         var id = $(this).attr('id-pasien')
         var id_antrian = $(this).attr('id-antrian')
         $.ajax({
@@ -122,6 +131,7 @@ $(document).ready(function(){
                 console.log(data);
             }
         });
+        @endhasrole
     })
 
     $(document).on('click','#close',function(){

@@ -42,5 +42,6 @@ Route::prefix('admin')->group(function () {
         Route::resource('master-asuransi-pasien','MasterAsuransiPasienController');
         Route::resource('master-jadwal-dokter','JadwalDokterController');
         Route::resource('master-user','MasterUserController');
+        Route::GET('/master-user/getprofilepasien/{id_pasien}', 'MasterUserController@getProfilePasien');
     });
 });
