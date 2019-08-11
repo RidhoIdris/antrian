@@ -110,7 +110,7 @@ class MasterDokterController extends Controller
                     'foto'         => $imageName,
                 ]);
                 @unlink(public_path('images/dokter/').$oldImage);
-                return response()->json(['message'=>'Asuransi Berhasil Diubah']);
+                return response()->json(['message'=>'Dokter Berhasil Diubah']);
             }
         }
     }
