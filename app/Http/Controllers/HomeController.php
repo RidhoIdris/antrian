@@ -63,38 +63,13 @@ and CAST(tb_antrian.created_at as date) = CURRENT_DATE)" );
         $pasien = Pasien::where('id_user','=',\Auth::user()->id)->first()->id;
         $dayNow = Carbon::now()->format('D');
         $time = date('H:i:s');
-        $cek = DB::table('master_pasien')
-                    ->orWhereNull('nama_lengkap')
-                    ->orWhere('nama_lengkap','')
-                    ->orWhereNull('nama_panggilan')
-                    ->orWhere('nama_panggilan','')
-                    ->orWhereNull('jenis_kelamin')
-                    ->orWhere('jenis_kelamin','')
-                    ->orWhereNull('tanggal_lahir')
-                    ->orWhereNull('no_identitas')
-                    ->orWhere('no_identitas','')
-                    ->orWhereNull('agama')
-                    ->orWhere('agama','')
-                    ->orWhereNull('pendidikan')
-                    ->orWhere('pendidikan','')
-                    ->orWhereNull('no_hp')
-                    ->orWhere('no_hp','')
-                    ->orWhereNull('alamat')
-                    ->orWhere('alamat','')
-                    ->orWhereNull('alamat_pj')
-                    ->orWhere('alamat_pj','')
-                    ->orWhereNull('nama_pj')
-                    ->orWhere('nama_pj','')
-                    ->orWhereNull('hubungan')
-                    ->orWhere('hubungan','')
-                    ->orWhereNull('no_hp_pj')
-                    ->orWhere('no_hp_pj','')
-                    ->where('id',$pasien)
+        $cek1 = DB::table('vw_cek_profile')
+                    ->where('id_user',\Auth::user()->id)
                     ->first();
-        if ($cek) {
-            return response()->json(['errors'=>'Silahkan Lengkapi Profile Anda TerlebihDahulu'],422);
+        if ($cek1) {
+            return response()->json(['errors'=>'Silahkan Lengkapi Profile Anda Terlebih Dahulu'],422);
         }else{
-            $cek = DB::table('tb_antrian')
+            $cek2 = DB::table('tb_antrian')
             ->whereDate('created_at',Carbon::today())
             ->where('id_dokter',$request->id_dokter)
             ->where('id_jadwal',$request->id_jadwal)
@@ -102,7 +77,7 @@ and CAST(tb_antrian.created_at as date) = CURRENT_DATE)" );
             ->where('status','0')
             ->where('id_dokter',$request->id_dokter)
             ->first();
-            if ($cek) {
+            if ($cek2) {
                 return response()->json(['errors'=>'Anda Sudah Mengambil Antrian Untuk Dokter Ini'],422);
             }else{
                 $validator = \Validator::make($request->all(),
