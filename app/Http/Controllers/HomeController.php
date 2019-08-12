@@ -24,18 +24,12 @@ class HomeController extends Controller
         master_spesialis.nama_spesialis,
         master_jadwal_dokter.jam_mulai,
         master_jadwal_dokter.jam_selesai,
-        COALESCE(tb_antrian.no_antrian,0) as no_antrian
+        COALESCE(max(tb_antrian.no_antrian),0) as no_antrian
          FROM
         master_jadwal_dokter
          INNER JOIN master_dokter ON master_jadwal_dokter.id_dokter = master_dokter.id
          INNER JOIN master_spesialis ON master_dokter.id_spesialis = master_spesialis.id
-         LEFT JOIN tb_antrian on master_jadwal_dokter.id = tb_antrian.id_jadwal and CAST(tb_antrian.created_at as date) = CURRENT_DATE where master_jadwal_dokter.hari = '$dayNow' and tb_antrian.no_antrian = (SELECT max(no_antrian) from tb_antrian where tb_antrian.id_jadwal = master_jadwal_dokter.id
-and CAST(tb_antrian.created_at as date) = CURRENT_DATE)" );
-        // $dokters = DB::select("SELECT master_dokter.id,nama_dokter,foto,nama_spesialis,COALESCE(max(tb_antrian.no_antrian),0) as no_antrian from master_jadwal_dokter left join tb_antrian on tb_antrian.id_dokter=master_jadwal_dokter.id_dokter and CAST(tb_antrian.created_at as date) = CURRENT_DATE join master_dokter on master_dokter.id = master_jadwal_dokter.id_dokter
-        // join master_spesialis on master_spesialis.id = master_dokter.id_spesialis
-        // where master_jadwal_dokter.hari='$dayNow'
-        // GROUP BY nama_dokter,nama_spesialis,foto,master_dokter.id
-        // ");
+         LEFT JOIN tb_antrian on master_jadwal_dokter.id = tb_antrian.id_jadwal and CAST(tb_antrian.created_at as date) = CURRENT_DATE where master_jadwal_dokter.hari = '$dayNow' GROUP BY master_dokter.id, master_jadwal_dokter.id, master_spesialis.nama_spesialis" );
         return view('antrian.index',compact('dokters','masuransi'));
     }
 
