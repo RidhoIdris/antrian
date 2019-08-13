@@ -96,7 +96,7 @@ $(document).ready(function(){
         var jam_mulai = $(this).attr('jam-mulai');
         var jam_selesai = $(this).attr('jam-selesai');
         var jam_sekarang = "{{date('H:i:s')}}";
-        if (jam_sekarang<jam_mulai || jam_sekarang>jam_selesai) {
+        if (jam_sekarang>jam_selesai) {
             Toast.fire({
                     type: 'error',
                     title: 'Antrian Belum Dibuka',
