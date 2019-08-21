@@ -31,7 +31,7 @@ class PasienController extends Controller
         );
         if ($validator->fails())
         {
-            return redirect()->back()->withInput()->withErrors($validator);;
+            return redirect()->back()->withInput()->withErrors($validator);
         }else
         {
             $pasien = Pasien::whereId_user($id_user)->update([

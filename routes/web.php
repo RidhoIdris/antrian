@@ -31,6 +31,8 @@ Route::prefix('admin')->group(function () {
         Route::PUT('/profile/{profile}/password', 'PasienController@password')->name('profile.password');
         Route::POST('/logout', 'AuthController@logout')->name('logout');
         Route::GET('/home', 'HomeController@index')->name('home.index');
+        Route::GET('/laporan', 'PrintController@index')->name('print.index');
+        Route::POST('/laporan', 'PrintController@cetak')->name('print.cetak');
         Route::GET('/antrian', 'AntrianController@index')->name('antrian.index');
         Route::PUT('/antrian/{antrian}', 'AntrianController@update');
         Route::GET('/antrian/getprofilepasien/{id_pasien}/{id_antrian}', 'AntrianController@getProfilePasien');

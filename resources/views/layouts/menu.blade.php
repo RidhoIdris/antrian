@@ -78,6 +78,12 @@
             </ul>
         </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('print.index')}}">
+                <i class="icon-user menu-icon"></i>
+                <span class="menu-title">Laporan</span>
+            </a>
+            </li>
         @endhasrole
     </ul>
 </nav>
