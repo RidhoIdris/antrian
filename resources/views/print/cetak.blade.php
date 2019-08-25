@@ -26,7 +26,7 @@
                   <th>Nama Dokter</th>
                   <th>Nama Pasien</th>
                   <th>Jenis Kelamin</th>
-                  <th>Tanggal Lahir</th>
+                  <th>Tanggal Antrian</th>
                   <th>Jam</th>
                   <th>Hari</th>
                   <th>Tipe Pembayaran</th>
@@ -40,7 +40,7 @@
                         <td>{{$data->nama_dokter}}</td>
                         <td>{{$data->nama_lengkap}}</td>
                         <td>{{$data->jenis_kelamin}}</td>
-                        <td>{{$data->tanggal_lahir}}</td>
+                        <td>{{$data->created_at}}</td>
                         <td>{{$data->jam}}</td>
                         <td>{{$data->hari}}</td>
                         <td>{{$data->tipe_pembayaran}}</td>
