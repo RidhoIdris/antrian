@@ -105,7 +105,7 @@ class MasterUserController extends Controller
     public function destroy($id)
     {
 
-        User::findOrFail($id)->delete($id);
+        // User::findOrFail($id)->delete($id);
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);

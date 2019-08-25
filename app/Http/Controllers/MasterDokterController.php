@@ -52,11 +52,24 @@ class MasterDokterController extends Controller
                 ->addColumn('spesialis',function($mdokter){
                     return $mdokter->master_spesialis->nama_spesialis;
                 })
+                ->addColumn('status',function($mdokter){
+                    if ($mdokter->status == '1') {
+                        return "Active";
+                    }else{
+                        return "Non-Active";
+                    }
+                })
                 ->addColumn('foto',function($mdokter){
                     return '<img src="'.asset("images/dokter")."/".$mdokter->foto.'" alt="profile image">';
                 })
                 ->addColumn('action',function($mdokter){
-                    return '<button type="button" data-id="'.$mdokter->id.'" id="edit" class="btn btn-outline-primary btn-sm">Edit</button>    <button type="button" data-id="'.$mdokter->id.'" id="hapus" class="btn btn-outline-danger btn-sm">hapus</button>';
+                    if ($mdokter->status == '1') {
+                        return '<button type="button" data-id="'.$mdokter->id.'" id="edit" class="btn btn-outline-primary btn-sm">Edit</button>    <button type="button" data-id="'.$mdokter->id.'" id="hapus" class="btn btn-outline-danger btn-sm">hapus</button>
+                        <button type="button" data-id="'.$mdokter->id.'" id="nonactive" class="btn btn-outline-warning btn-sm">Non-Active</button>';
+                    }else{
+                        return '<button type="button" data-id="'.$mdokter->id.'" id="edit" class="btn btn-outline-primary btn-sm">Edit</button>    <button type="button" data-id="'.$mdokter->id.'" id="hapus" class="btn btn-outline-danger btn-sm">hapus</button>
+                        <button type="button" data-id="'.$mdokter->id.'" id="active" class="btn btn-outline-warning btn-sm">Active</button>';
+                    }
                 })
                 ->rawColumns(['foto'=>'foto','action'=>'action'])
                 ->toJson();
@@ -123,5 +136,19 @@ class MasterDokterController extends Controller
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);
+    }
+
+    public function active($id){
+        MasterDokter::where(['id'=>$id])->update([
+            'status'=> '1',
+        ]);
+        return response()->json(['message'=>'Dokter Active']);
+    }
+
+    public function nonactive($id){
+        MasterDokter::where(['id'=>$id])->update([
+            'status'=> '0',
+        ]);
+        return response()->json(['message'=>'Dokter Non-Active']);
     }
 }

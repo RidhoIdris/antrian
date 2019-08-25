@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\MasterAsuransi;
 use App\AntrianPasien;
+use App\MasterSpesialis;
 use App\Pasien;
 
 class HomeController extends Controller
@@ -15,6 +16,7 @@ class HomeController extends Controller
     {
         $masuransi = DB::table('view_asuransi_pasien')->where('user_id','=',\Auth::user()->id)->get();
         $dayNow = $this->converthari(Carbon::now()->format('D'));
+        $spesialiss = MasterSpesialis::all();
         $dokters = DB::select("SELECT DISTINCT
         master_dokter.id,
         master_jadwal_dokter.id as id_jadwal,
@@ -29,8 +31,8 @@ class HomeController extends Controller
         master_jadwal_dokter
          INNER JOIN master_dokter ON master_jadwal_dokter.id_dokter = master_dokter.id
          INNER JOIN master_spesialis ON master_dokter.id_spesialis = master_spesialis.id
-         LEFT JOIN tb_antrian on master_jadwal_dokter.id = tb_antrian.id_jadwal and CAST(tb_antrian.created_at as date) = CURRENT_DATE where master_jadwal_dokter.hari = '$dayNow' GROUP BY master_dokter.id, master_jadwal_dokter.id, master_spesialis.nama_spesialis" );
-        return view('antrian.index',compact('dokters','masuransi'));
+         LEFT JOIN tb_antrian on master_jadwal_dokter.id = tb_antrian.id_jadwal and CAST(tb_antrian.created_at as date) = CURRENT_DATE where master_jadwal_dokter.hari = '$dayNow' and master_dokter.status='1' GROUP BY master_dokter.id, master_jadwal_dokter.id, master_spesialis.nama_spesialis" );
+        return view('antrian.index',compact('dokters','masuransi','spesialiss'));
     }
 
     public function converthari($date)

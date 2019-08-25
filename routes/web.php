@@ -39,6 +39,8 @@ Route::prefix('admin')->group(function () {
         Route::GET('/antrian/getpasien/{id_dokter}', 'AntrianController@getListPasien');
         Route::POST('/home', 'HomeController@store')->name('home.store');
         Route::resource('master-dokter','MasterDokterController');
+        Route::PUT('/master-dokter/active/{id}', 'MasterDokterController@active');
+        Route::PUT('/master-dokter/nonactive/{id}', 'MasterDokterController@nonactive');
         Route::resource('master-spesialis','MasterSpesialisController');
         Route::resource('master-asuransi','MasterAsuransiController');
         Route::resource('master-asuransi-pasien','MasterAsuransiPasienController');

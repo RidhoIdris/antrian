@@ -18,7 +18,8 @@
                     <th>Nama Dokter</th>
                     <th>Spesialis</th>
                     <th>Foto</th>
-                    <th width="150px;" style="text-align:center" >Actions</th>
+                    <th>Status</th>
+                    <th width="250px;" style="text-align:center" >Actions</th>
                 </tr>
                 </thead>
             </table>
@@ -41,6 +42,7 @@
                         { data: 'nama_dokter'},
                         { data: 'spesialis'},
                         { data: 'foto', name: 'foto', orderable:false, searchable:false },
+                        { data: 'status'},
                         { data: 'action', name: 'action', orderable:false, searchable:false },
                     ],
         });
@@ -129,6 +131,76 @@
                             Toast.fire({
                                 type: 'success',
                                 title: "Dokter Berhasil Di Hapus",
+                            });
+                            getData.ajax.reload();
+                            NProgress.done();
+                        },error:function(data){
+                            console.log(data);
+                            NProgress.done();
+                        }
+                    })
+                }
+            })
+        });
+
+        $(document).on('click','#active',function(e){
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, actived it!'
+                }).then((result) => {
+                if (result.value) {
+                    NProgress.start();
+                    $.ajax({
+                        type : "PUT",
+                        url  :  'master-dokter/active/'+id,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success:function(){
+                            Toast.fire({
+                                type: 'success',
+                                title: "Dokter Active",
+                            });
+                            getData.ajax.reload();
+                            NProgress.done();
+                        },error:function(data){
+                            console.log(data);
+                            NProgress.done();
+                        }
+                    })
+                }
+            })
+        });
+
+        $(document).on('click','#nonactive',function(e){
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Non-Actived it!'
+                }).then((result) => {
+                if (result.value) {
+                    NProgress.start();
+                    $.ajax({
+                        type : "PUT",
+                        url  :  'master-dokter/nonactive/'+id,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success:function(){
+                            Toast.fire({
+                                type: 'success',
+                                title: "Dokter Non-Actived",
                             });
                             getData.ajax.reload();
                             NProgress.done();
