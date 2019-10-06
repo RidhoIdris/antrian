@@ -12,6 +12,15 @@ use App\Pasien;
 class HomeController extends Controller
 {
 
+    // public function __construct()
+    // {
+    //     if (\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('perawat')) {
+    //         return redirect()->route('antrian.index');
+    //     } else {
+    //         return redirect()->route('home.index');
+    //     }
+    // }
+
     public function index()
     {
         $masuransi = DB::table('view_asuransi_pasien')->where('user_id','=',\Auth::user()->id)->get();

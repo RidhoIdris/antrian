@@ -14,12 +14,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/',function(){
             return redirect()->route('home.index');
         });
+        // Route::get('/home',function(){
+        //     if (\Auth::user()->hasRole('admin') || \Auth::user()->hasRole('perawat')) {
+        //         return redirect()->route('antrian.index');
+        //     } else {
+        //         return redirect()->route('home.index');
+        //     }
+
+        // });
+        Route::GET('/home', 'HomeController@index')->name('home.index');
         Route::get('/dashboard',function(){
             return redirect()->route('home.index');
         });
-        Route::get('/',function(){
-            return redirect()->route('home.index');
-        });
+        // Route::get('/',function(){
+        //     return redirect()->route('home.index');
+        // });
         Route::get('/profile', 'PasienController@index')->name('profile.index');
         Route::get('/test', function(){
             return csrf_token();
@@ -30,7 +39,6 @@ Route::prefix('admin')->group(function () {
         Route::PUT('/profile/{profile}/penjamin', 'PasienController@penjamin')->name('profile.penjamin');
         Route::PUT('/profile/{profile}/password', 'PasienController@password')->name('profile.password');
         Route::POST('/logout', 'AuthController@logout')->name('logout');
-        Route::GET('/home', 'HomeController@index')->name('home.index');
         Route::GET('/laporan', 'PrintController@index')->name('print.index');
         Route::POST('/laporan', 'PrintController@cetak')->name('print.cetak');
         Route::GET('/antrian', 'AntrianController@index')->name('antrian.index');

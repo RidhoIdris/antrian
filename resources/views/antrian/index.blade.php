@@ -1,5 +1,8 @@
 @extends('layouts.master')
 @section('content')
+@hasanyrole('admin|perawat')
+<script>window.location = "/admin/antrian";</script>
+@endhasanyrole
 @foreach ($spesialiss as $spesialis)
     <div class="card">
         <div class="card-body">
